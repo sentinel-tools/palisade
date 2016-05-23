@@ -37,18 +37,18 @@ func sentinelGetMasterAddressByName(c *Command, w *bufio.Writer) error {
 	for sa, _ := range managingSentinels {
 		sc, err := client.DialAddress(sa)
 		if err == nil {
-			res, err := sc.SentinelGetMaster(name)
+			res, _ := sc.SentinelGetMaster(name)
 			if res.Host > "" {
 				minfo = append(minfo, res.Host)
 				minfo = append(minfo, fmt.Sprintf("%d", res.Port))
 				return SendBulkStrings(w, minfo)
 			}
-			if err != nil {
-				log.Printf("[%s] error: %s", sc, err.Error())
-			}
+			log.Printf("[%s] no such pod", sa)
+			continue
 		}
+		log.Printf("[%s] error: %s", sa, err.Error())
 	}
-	log.Printf("not found anywhere, return error")
+	log.Printf("Pod '%s' not found anywhere, return error", name)
 	return SendError(w, fmt.Sprintf("-ERR No such pod '%s'", name))
 }
 

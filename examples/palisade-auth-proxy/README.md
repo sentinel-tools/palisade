@@ -14,9 +14,6 @@ Managing Sentinel: an IP:PORT string representing an actual sentinel whch manage
 
 # Caveats
 
-* You will need to use the compiled-in auth token
-* You will need to add any managing sentinels via `addsentinel <ip:port>"
-  after authenticating
 * You can pass the following commands which are proxied to the mangaing sentinels:
 	* sentinel master <podname>
 	* sentinel get-master-add-by-name
@@ -26,11 +23,25 @@ sentinel to respond. What I'd want to see is for it to query each sentinel
 known by the pod and pass along the information from QUORUM/KNOWN sentinels to
 help ensure you get accurate information.
 
+# Command Options
+
+You can use `-h` or `help`, or `--help` to get comand line help.
+
+## Setting Port
+Command flag: `-p`or  `--port` followed by the port number.
+
+## Setting Auth token
+Command flag: `-a`or  `--authtoken` followed by the token to use
+
+## Setting Sentinel addresses
+Command flag: `-s` or `--sentineladdr` followed by the IP:PORT string
+identifying the address.  For this command you can pass it for each sentinel
+to add to the proxy's pool.
+
 
 # TODO
 	* proxy slaves command 
 	* Config backing stores (file, Consul)
-	* Command line options (managing sentinels, auth token, port)
 
 # Strech TODOs
 	* implement command to specify pod's auth token
